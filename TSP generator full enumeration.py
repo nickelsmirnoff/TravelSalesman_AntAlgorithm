@@ -95,7 +95,7 @@ CurrDir = os.getcwd()
 # print(CurrDir)
 
 N = 10 #задаем N
-for i in range(5):#создаем 10 txt файлов с матрицей, опт маршрутом и расстоянием
+for i in range(5):#создаем 5 txt файлов с матрицей, опт маршрутом и расстоянием
     filename = CurrDir+"\\"+str(i)+".txt"
     if os.path.isfile(filename):
         os.remove(filename)
