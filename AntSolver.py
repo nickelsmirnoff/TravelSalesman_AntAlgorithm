@@ -116,53 +116,24 @@ def FerrRouteBuilder(Ferr,D): # функция построения оптима
     # best = np.min()
     # print(Solves)
     min, route = MinFromArr(Solves)
-    print(route,"<-",min)
+    # print(route,"<-",min)
     # bestD = np.min(Solves.keys())
     # bestR = Solves[str(BestD)]
     # print(bestD,bestR)
-    return
+    return min, route
 
 def AntAlgorithmSolver(D, alpha, beta, Q, ro, AntNumber, IterNumber):
     # функция принимает на вход матрицу расстояний D, альфа, бета, Q, ро, количество муравьев и количество итераций
     Ferr = StartFeromoneMatrix(D)  # создаем начальную матрицу распределения феромона
     D1 = MatrixReverse(D, beta)  # создаем матрицу обратных расстояний 1/dij в степени бета
-    # print(D1)
-    # Ant1 = Ant(1,D)
-    # print(Ant1.__dict__)
-    # Ant1.AddCity(4, D)
-    # print(Ant1.__dict__)
-    # Ant1.AddCity(2, D)
-    # print(Ant1.__dict__)
-    # Ant1.AddCity(3, D)
-    # print(Ant1.__dict__)
-    # Ant1.AddCity(2, D)
-    # Ant2 = Ant(3,D)
-    # print(Ant2.__dict__)
-    # Ant2.AddCity(4,D)
-    # print(Ant2.__dict__)
+    BestDist = 9223372036854775800
+    BestRoute = []
     # создаем экземпляры класса Ant в количестве AntNumber и сохраняем в список Ants
     for step in range(IterNumber):
         Ants = []
         for i in range(AntNumber): # случайная расстановка муравьев по городам с повторениями
             newAnt = Ant(rnd.randint(0, len(D) - 1), D)
             Ants.append(newAnt)
-        # for i in range(AntNumber):
-            # Ants[i].AddCity(rnd.randint(0, len(D) - 1), D)
-            # print(f"Ants[{i}]: {Ants[i].__dict__}")
-            # print(Ants[i].ProbCalculator(Ferr, alpha, D1))
-        # Ants[0].AddCity(0,D)
-        # Ants[0].AddCity(1,D)
-        # print(f"Ants[0]: {Ants[0].__dict__}")
-        # print(Ants[0].ProbCalculator(Ferr, alpha, D1))
-        # Ants[0].AddCity(2,D)
-        # print(f"Ants[0]: {Ants[0].__dict__}")
-        # print(Ants[0].ProbCalculator(Ferr, alpha, D1))
-        # Ants[0].AddCity(3,D)
-        # print(f"Ants[0]: {Ants[0].__dict__}")
-        # print(Ants[0].ProbCalculator(Ferr, alpha, D1))
-        # Ants[0].AddCity(4,D)
-        # print(f"Ants[0]: {Ants[0].__dict__}")
-        # print(Ants[0].ProbCalculator(Ferr, alpha, D1))
         K = [[set() for j in range(len(D))] for i in range(len(D))]# K - матрица номеров муравьев, выбравших i-j маршрут. Заполняем пуст множ
         for ant_i in Ants: # один пробег всех муравьев по замкнутому маршруту
             for j in range(len(D)-1): # пока не кончится список доступных городов
@@ -178,13 +149,20 @@ def AntAlgorithmSolver(D, alpha, beta, Q, ro, AntNumber, IterNumber):
         for i in range(AntNumber):
             del Ants[0]
         # print(Ants)
+        min, route = FerrRouteBuilder(Ferr, D)
+        if min < BestDist:
+            BestDist= min
+            BestRoute = route
+            print("Iteration",step,"best dist =",BestDist,"<-",BestRoute)
+
     # for fer in Ferr:
     #     print(np.round(fer,decimals=2))
     # print()
-    FerrRouteBuilder(Ferr,D)
 
 
-    return
+
+
+    return BestDist, BestRoute
 
 class Ant:
     "класс муравей со всей информацией по нему: CurCity, AvailableCities, CurRoute, CurDist"
@@ -263,12 +241,18 @@ for FileName in FilesList: #проходим по всем входным фай
     print("Processing")
 
 
-    #запускаем функцию решения задачи муравьиным алгоритмом для полученных данных
+    #задаем параметры алгоритма и запускаем решение для полученных данных
     # AntAlgorithmSolver(Matrix, 1, 0, 50, 0.1, 5, 50000)# парамерты D,alpha,beta,Q,ro,AntNumber,IterNumber
-    # AntAlgorithmSolver(Matrix, 0, 1, 50, 0.1, 5, 50000)  # парамерты D,alpha,beta,Q,ro,AntNumber,IterNumber
-    AntAlgorithmSolver(Matrix, 0.5, 0.5, 25, 0.1, 50, 10)  # парамерты D,alpha,beta,Q,ro,AntNumber,IterNumber
-    AntAlgorithmSolver(Matrix, 0.5, 0.5, 10, 0.1, 50, 100)
-    AntAlgorithmSolver(Matrix, 0.5, 0.5, 5, 0.1, 50, 1000)
-    AntAlgorithmSolver(Matrix, 0.5, 0.5, 1, 0.1, 50, 10000)
+
+    alpha = 0.5
+    beta = 0.5
+    Q = 400
+    ro = 0.1
+    AntNumber = 20
+    IterNumber = 10000
+    print()
+    print("!!!Best dist and route are: ",AntAlgorithmSolver(Matrix, alpha, beta, Q, ro, AntNumber, IterNumber), "after",IterNumber,"iterations!!!")
+    # AntAlgorithmSolver(Matrix, 0.5, 0.5, 25, 0.1, 5, 10000)
+    # AntAlgorithmSolver(Matrix, 0.5, 0.5, 25, 0.1, 5, 30000)
 
 
