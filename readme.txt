@@ -2,9 +2,9 @@ Use this proect for researching Ant algorithm for travelling salesman problem(TS
 
 file 1:
 TSP generator full enumeration.py
-is a script for generating TSP matrix and solving with full enumeration.
+is a script for generating TSP matrix and solving it with full enumeration.
 It creates a folder "Result" in the same directory and fills it with some .txt files
-containing a matrix, best route and optimal distance for TSP/
+containing a matrix, best route and optimal distance for TSP
 !Carefully change the parameter N, if it is more than 11, script will work very long time!
 
 file 2:
@@ -17,4 +17,11 @@ Function AntAlgorithmSolver has a lot of parameters:
 D - distance matrix for TSP
 alpha, beta, Q, ro - Ant algorithm parameters
 AntNumber - number of created ants for solving TSP
-IterNumber - number of iterations of the ant algorithm. Better use 10000 or more
+IterNumber - number of iterations of the ant algorithm. Better use 10000 or more for N>10
+
+folder "Input" is for using "AntSolver.py", the script reads all .txt files in this folder
+(ignoring files in nested folders)
+and tries solving TSP problem for parameters from .txt file.
+
+folder "эксперименты" contains some excel files with results of analyzing Ant algorithm solutions of TSP
+
